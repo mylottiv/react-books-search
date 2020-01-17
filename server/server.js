@@ -3,8 +3,6 @@ const path = require('path');
 const app = express();
 const apiRoutes = require('./router');
 const PORT = process.env.PORT || 4000;
-const key = 'AIzaSyBGjN1NV_BKLUCJA1YNcYj1SVsc1vBNmF8';
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, '../client/build')));
