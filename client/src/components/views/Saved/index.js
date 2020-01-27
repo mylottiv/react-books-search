@@ -1,4 +1,30 @@
 import React, {useState, useEffect} from 'react';
+import {HeaderLayout, ContentLayout, OutputLayout} from '../..'
+
+// function SavedBookCard(props) {
+//     return (
+//         <div className='row card-group' key={`saved-book-${item._id}}`}>
+//             <div className='col card'>
+//                 <div className='card-body row'>
+//                     <div className='col'>
+//                         <img className='img-thumbnail' src={item.image} />
+//                     </div>
+//                     <div className='col'>
+//                         <h4 className='card-title'>{item.title}</h4>
+//                         <h5 className='card-subtitle'>{item.authors}</h5>
+//                         <a href={item.link}>Link</a>
+//                     </div>
+//                     <div className='col'>
+//                         <button className='btn-help' type='button' onClick={deleteSavedBook(savedBooks[i]._id, savedBooks, setSavedBooks)}>Delete</button>
+//                     </div>
+//                 </div>
+//                 <div className='card-body row'>
+//                     <p className='card-text'>{item.description.slice(0, 280) + '...'}</p>
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
 
 function deleteSavedBook(id, savedBooks, setSavedBooks) {
     return (e) => {
@@ -64,18 +90,14 @@ function Saved() {
 
     return (
         <div className='container'>
-            <div className='row'>
-                <h2>Saved</h2>
-            </div>
-            <div className='row'>
+            <HeaderLayout name='Saved' />
+            <ContentLayout>
                 <p>Your previously saved books will appear here</p>
-            </div>
-            <div className='row'>
-                <div className='container'>
-                    {list}
-                </div>
-            </div>
-        </div>    
+            </ContentLayout>
+            <OutputLayout>
+                {list}
+            </OutputLayout>
+        </div>
     )
 }
 

@@ -1,19 +1,12 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
-import {Search, Saved, Home} from './components';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
+import {Search, Saved, Home, NavBar} from './components';
 
 
 function App() {
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="#">Books</a>
-        <div className='navbar-nav'>
-          <a className='nav-item nav-link' href='/'>Home</a>
-          <a className='nav-item nav-link' href='/search'>Search</a>
-          <a className='nav-item nav-link' href='/saved'>Saved</a>
-        </div>
-      </nav>
+      <NavBar />
       <Switch>
         <Route path='/search' render={(props) => {
           return (
@@ -25,9 +18,14 @@ function App() {
             <Saved />
           )
         }}/>
-        <Route path='/' render={(props) => {
+        <Route path='/home' render={(props) => {
           return (
             <Home />
+          )
+        }}/>
+        <Route path='/' render={(props) => {
+          return (
+            <Redirect to='/home' />
           )
         }}/>      
       </Switch>

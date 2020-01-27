@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {HeaderLayout, ContentLayout, OutputLayout} from '../..';
+import BookSearch from './BookSearch'
 
 function updateInput(setUserInput) {
     return (e) => {
@@ -11,13 +13,13 @@ function fetchFromGoogleBooks(userInput, setQueryResults) {
   return (e) => {      
     fetch(`https://www.googleapis.com/books/v1/volumes?q=${userInput}&key=AIzaSyBGjN1NV_BKLUCJA1YNcYj1SVsc1vBNmF8&country=US`)
     .then((response) => {
-        console.log(response);
+        console.log('Fetch response', response);
         return response.json()
     }).then((data) => {
-        console.log(data.items);
+        console.log('Fetch data', data.items);
         return setQueryResults(data.items);
     }).catch(err => {
-        console.log(err);
+        console.log('Fetch Err', err);
     })
 }
 }
@@ -63,7 +65,7 @@ function Search() {
                 <div className='col card'>
                     <div className='card-body row'>
                         <div className='col'>
-                            <img className='img-thumbnail' src={item.volumeInfo.imageLinks.thumbnail} />
+                            <img className='img-thumbnail' src={(item.volumeInfo.imageLinks) ? item.volumeInfo.imageLinks.thumbnail : ''} />
                         </div>
                         <div className='col'>
                             <h4 className='card-title'>{item.volumeInfo.title}</h4>
@@ -75,31 +77,26 @@ function Search() {
                         </div>
                     </div>
                     <div className='card-body row'>
-                        <p className='card-text'>{item.volumeInfo.description.slice(0, 280) + '...'}</p>
+                        <p className='card-text'>
+                            {(item.volumeInfo.description) ? item.volumeInfo.description.slice(0, 280) + '...' : '...'}
+                        </p>
                     </div>
                 </div>
             </div>
         )
     });
 
-
     return (
         <div className='container'>
-            <div className='row'>
-                <h2>Search</h2>
-            </div>
-            <div className='row'>
-                <form>
-                    <input type='text' placeholder='Search GoogleBooks' onChange={updateInput(setUserInput)}></input>
-                    <button type='button' className='btn-danger' onClick={fetchFromGoogleBooks(userInput, setQueryResults)}>Get Results</button>
-                </form>
-            </div>
-            <div className='row'>
-                <div className='container'>
-                    {list}
-                </div>
-            </div>
-        </div>    )
+            <HeaderLayout name='Search' />
+            <ContentLayout>
+                <BookSearch onChange={updateInput(setUserInput)} onClick={fetchFromGoogleBooks(userInput, setQueryResults)} />
+            </ContentLayout>
+            <OutputLayout>
+                {list}
+            </OutputLayout>
+        </div>
+    )
 }
 
 export default Search;
