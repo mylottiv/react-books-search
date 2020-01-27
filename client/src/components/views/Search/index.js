@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {HeaderLayout, ContentLayout, OutputLayout} from '../..';
+import {HeaderLayout, ContentLayout, OutputLayout, BookCard} from '../..';
 import BookSearch from './BookSearch'
 
 function updateInput(setUserInput) {
@@ -24,20 +24,14 @@ function fetchFromGoogleBooks(userInput, setQueryResults) {
 }
 }
 
-function saveBook(i, queryResults) {
+function saveBook(i, bookData) {
     return (e) => {
         fetch('./api/books', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                title: queryResults[i].volumeInfo.title,
-                authors: (queryResults[i].volumeInfo.authors.length > 0) ? queryResults[i].volumeInfo.authors[0] : queryResults[i].volumeInfo.authorsqueryResults[i].volumeInfo.authors ,
-                description: queryResults[i].volumeInfo.description,
-                image: queryResults[i].volumeInfo.imageLinks.thumbnail,
-                link: queryResults[i].volumeInfo.infoLink
-            })
+            body: JSON.stringify(bookData)
         })
         .then((response) => {
             console.log(response);
@@ -59,30 +53,17 @@ function Search() {
 
     let constraint = (queryResults.length > 20) ? 20 : queryResults.length;
 
-    const list = queryResults.slice(0, constraint).map((item, i) => {
+    const list = queryResults.slice(0, constraint).map(({volumeInfo}, i) => {
+        console.log(volumeInfo);
+        const formattedData = {
+            title: volumeInfo.title,
+            authors: (!volumeInfo.authors) ? ['N/A'] : (volumeInfo.authors.length > 0) ? volumeInfo.authors : [volumeInfo.authors[0]],
+            description: (volumeInfo.description) ? volumeInfo.description.slice(0, 280) + '...' : '...',
+            image: (volumeInfo.imageLinks.thumbnail) ? volumeInfo.imageLinks.thumbnail : '',
+            link: volumeInfo.infoLink
+        }
         return (
-            <div className='row card-group' key={`item-${i}`}>
-                <div className='col card'>
-                    <div className='card-body row'>
-                        <div className='col'>
-                            <img className='img-thumbnail' src={(item.volumeInfo.imageLinks) ? item.volumeInfo.imageLinks.thumbnail : ''} />
-                        </div>
-                        <div className='col'>
-                            <h4 className='card-title'>{item.volumeInfo.title}</h4>
-                            <h5 className='card-subtitle'>{item.volumeInfo.authors}</h5>
-                            <a href={item.volumeInfo.infoLink}>Link</a>
-                        </div>
-                        <div className='col'>
-                            <button className='btn-help' type='button' onClick={saveBook(i, queryResults)}>Save</button>
-                        </div>
-                    </div>
-                    <div className='card-body row'>
-                        <p className='card-text'>
-                            {(item.volumeInfo.description) ? item.volumeInfo.description.slice(0, 280) + '...' : '...'}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <BookCard key={`item-${i}`} data={formattedData} onClick={saveBook(i, formattedData)} />
         )
     });
 

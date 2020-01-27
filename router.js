@@ -7,12 +7,12 @@ router.use(express.urlencoded({extended: true}));
 
 // books GET
 router.get('/books', (req, res) => {
+    console.log('hit', req.body);
     Book.find({}).then(results => res.json(results));
 });
 
 // books POST
 router.post('/books', (req, res) => {
-    console.log('hit', req.body);
     const newBook = new Book({
         ...req.body
     })
