@@ -9,13 +9,14 @@ function App() {
       <NavBar />
       <Switch>
         <Route path='/search' render={(props) => {
+          console.log('route props', props);
           return (
-            <Search />
+            <Search initialQuery={(props.location.pathname !== props.match.path) ? props.location.pathname.replace(props.match.path + '/', '') : ''} {...props}/>
           )
         }}/>
         <Route path='/saved' render={(props) => {
           return (
-            <Saved />
+            <Saved initialQuery={props.location.pathname.replace(props.match.path + '/', '')} {...props}/>
           )
         }}/>
         <Route path='/home' render={(props) => {

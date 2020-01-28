@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {HeaderLayout, ContentLayout, OutputLayout, BookCard} from '../..'
 
 function deleteSavedBook(id, savedBooks, setSavedBooks) {
-    return (e) => {
+    const deleteBook = (e) => {
         fetch('./api/books/' + id, {
             method: 'DELETE',
             headers: {
@@ -19,6 +19,7 @@ function deleteSavedBook(id, savedBooks, setSavedBooks) {
             console.log(err);
         })
     }
+    return {type:'Delete Book', callback: deleteBook}
 }
 
 function Saved() {
